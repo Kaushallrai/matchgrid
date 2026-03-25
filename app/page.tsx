@@ -29,7 +29,7 @@ export default async function Dashboard() {
       </div>
 
       {/* Stat cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map(({ label, value, icon: Icon, color }) => (
           <Card key={label}>
             <CardContent className="p-5">
@@ -60,14 +60,14 @@ export default async function Dashboard() {
         <CardContent className="space-y-2">
           {recentMatches && recentMatches.length > 0 ? recentMatches.map(m => (
             <Link key={m.id} href={`/matches/${m.id}`}
-              className="flex items-center justify-between p-3 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors">
+              className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors gap-2 sm:gap-0">
               <span className="text-xs text-muted-foreground">
                 {new Date(m.played_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
               </span>
               <span className="text-sm font-semibold">
                 {m.team_a_score ?? '?'} — {m.team_b_score ?? '?'}
               </span>
-              <Badge variant={m.winner === 'A' ? 'default' : m.winner === 'B' ? 'secondary' : 'outline'}>
+              <Badge variant={m.winner === 'A' ? 'default' : m.winner === 'B' ? 'secondary' : 'outline'} className="w-fit">
                 {m.winner ? (m.winner === 'draw' ? 'Draw' : `Team ${m.winner} wins`) : 'Pending'}
               </Badge>
             </Link>
