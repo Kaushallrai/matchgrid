@@ -6,7 +6,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Slider } from '@/components/ui/slider'
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel,
   AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
@@ -16,6 +15,7 @@ import { Pencil, Trash2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import { RatingInput } from '@/components/ui/rating'
 
 export default function EditPlayerDialog({ player }: { player: any }) {
   const [open, setOpen] = useState(false)
@@ -111,47 +111,21 @@ export default function EditPlayerDialog({ player }: { player: any }) {
 
           {/* Skill sliders */}
           {attrs.map(({ key, label }) => (
-            <div key={key} className="space-y-2">
-              <div className="flex justify-between items-center">
-                <Label>{label}</Label>
-                <div className="flex items-center gap-2">
-                  {/* Show dots for visual rating */}
-                  {[1,2,3,4,5].map(n => (
-                    <button key={n} type="button"
-                      onClick={() => setForm(f => ({ ...f, [key]: n }))}
-                      className={cn(
-                        'w-5 h-5 rounded-full border text-xs font-bold transition-colors',
-                        form[key] >= n
-                          ? 'bg-primary border-primary text-black'
-                          : 'border-border text-muted-foreground hover:border-primary/50'
-                      )}>
-                    </button>
-                  ))}
-                  <span className="text-sm font-semibold text-primary w-4 text-right">
-                    {form[key]}
-                  </span>
-                </div>
+            <div key={key} className="space-y-1.5">
+              <div className="flex justify-between items-center bg-secondary/20 p-2 rounded-xl border border-border/30">
+                <Label className="pl-2 font-medium">{label}</Label>
+                <RatingInput value={form[key]} onChange={(val: number) => setForm(f => ({ ...f, [key]: val }))} />
               </div>
-              <Slider
-                min={1} max={5} step={1}
-                value={[form[key]]}
-                onValueChange={(v: any) => setForm(f => ({ ...f, [key]: Array.isArray(v) ? v[0] : v }))}
-              />
             </div>
           ))}
 
           {/* GK ability — only if GK */}
           {form.preferred_position === 'GK' && (
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <Label>GK Ability</Label>
-                <span className="text-sm font-semibold text-primary">{form.gk_ability}</span>
+            <div className="space-y-1.5">
+              <div className="flex justify-between items-center bg-secondary/20 p-2 rounded-xl border border-border/30">
+                <Label className="pl-2 font-medium">GK Ability</Label>
+                <RatingInput value={form.gk_ability} onChange={(val: number) => setForm(f => ({ ...f, gk_ability: val }))} />
               </div>
-              <Slider
-                min={1} max={5} step={1}
-                value={[form.gk_ability]}
-                onValueChange={(v: any) => setForm(f => ({ ...f, gk_ability: Array.isArray(v) ? v[0] : v }))}
-              />
             </div>
           )}
 

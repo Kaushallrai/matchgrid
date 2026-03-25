@@ -4,11 +4,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Slider } from '@/components/ui/slider'
 import { Plus } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import { RatingInput } from '@/components/ui/rating'
 
 const defaultForm = {
   name: '', preferred_position: 'MID',
@@ -76,24 +76,20 @@ export default function AddPlayerDialog() {
           </div>
 
           {(['attack','defense','stamina','passing'] as const).map(attr => (
-            <div key={attr} className="space-y-2">
-              <div className="flex justify-between">
-                <Label className="capitalize">{attr}</Label>
-                <span className="text-sm font-semibold text-primary">{form[attr]}</span>
+            <div key={attr} className="space-y-1.5">
+              <div className="flex justify-between items-center bg-secondary/20 p-2 rounded-xl border border-border/30">
+                <Label className="capitalize pl-2 font-medium">{attr}</Label>
+                <RatingInput value={form[attr]} onChange={(val: number) => setForm(f => ({ ...f, [attr]: val }))} />
               </div>
-              <Slider min={1} max={5} step={1} value={[form[attr]]}
-                onValueChange={(val: any) => setForm(f => ({ ...f, [attr]: Array.isArray(val) ? val[0] : val }))} />
             </div>
           ))}
 
           {form.preferred_position === 'GK' && (
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <Label>GK Ability</Label>
-                <span className="text-sm font-semibold text-primary">{form.gk_ability}</span>
+            <div className="space-y-1.5">
+              <div className="flex justify-between items-center bg-secondary/20 p-2 rounded-xl border border-border/30">
+                <Label className="pl-2 font-medium">GK Ability</Label>
+                <RatingInput value={form.gk_ability} onChange={(val: number) => setForm(f => ({ ...f, gk_ability: val }))} />
               </div>
-              <Slider min={1} max={5} step={1} value={[form.gk_ability]}
-                onValueChange={(val: any) => setForm(f => ({ ...f, gk_ability: Array.isArray(val) ? val[0] : val }))} />
             </div>
           )}
         </div>
